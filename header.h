@@ -17,7 +17,7 @@ typedef struct {
 } keyMap;
 
 // maps.c
-int loadKeymap(keyMap *mapsArrayPtr[20]);
+int loadKeymap(keyMap **mapsArrayPtr, char *filename);
 
 // output.c
 void emit(int fd, int type, int code, int val);

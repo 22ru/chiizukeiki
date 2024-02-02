@@ -9,13 +9,16 @@ int main (int argc, char **argv) {
 	struct input_event data;
 	int mapCount=0;
 	keyMap *mapsArray[20];
-	printf("Mapsarray location in main: %x\n", &mapsArray);
-	printf("Mapsarray in main: %x\n", mapsArray);
 
-	mapCount = loadKeymap(mapsArray);
+	if (argc > 1) {
+		printf("Loading from file %s\n", argv[1]);
+		mapCount = loadKeymap(mapsArray, argv[1]);
+	} else {
+		mapCount = loadKeymap(mapsArray, "default.map");
+	}
 
 	for (int i = 0; i< mapCount; i++) {
-		printf("Map #%d: location: %x\n", i, &mapsArray[i]);
+		printf("Map #%d, memory location: %x\n", i, &mapsArray[i]);
 		printf("\t%d %d %d %d %d %d\n", mapsArray[i]->eventType, mapsArray[i]->eventCode, mapsArray[i]->eventValue, mapsArray[i]->result[0], mapsArray[i]->result[1], mapsArray[i]->result[2]);
 	}
 
