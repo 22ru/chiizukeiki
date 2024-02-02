@@ -7,25 +7,26 @@
 int main (int argc, char **argv) {
 	int fd_i, fd_uinput;
 	struct input_event eventData;
-	int mapCount=0;
+	int mapCount = 0;
+	// there are only 14 keys on the left joycon
 	keyMap *mapsArray[20];
 
 	if (argc > 1) {
 		printf("Loading config from file %s\n", argv[1]);
 		mapCount = loadKeymap(mapsArray, argv[1]);
 	} else {
-		mapCount = loadKeymap(mapsArray, "default.map");
+		mapCount = loadKeymap(mapsArray, "./default.map");
 	}
 
 	fd_uinput = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
 	if (fd_uinput < 0) {
-        printf("Output (uinput) could not be opened. Are you root?");
+        printf("Output (/dev/uinput) could not be opened. Are you root?");
         return 0;
     }
 	createVirtualInput(fd_uinput, mapsArray, mapCount);
 
-	// TO DO: don't hardcode this event location!!!
-	fd_i = open("/dev/input/event21", O_RDONLY);
+	// be sure to create a udev rule for this symlink!
+	fd_i = open("/dev/joycon-l", O_RDONLY);
 	if (fd_i < 0) {
         printf("Input could not be opened.");
         return 0;

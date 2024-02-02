@@ -1,2 +1,2 @@
 # chiizukeiki
-a cheesecake
+it is a cheesecake

@@ -1,21 +1,122 @@
-	//multiple keys can be sent with just one report for press and release each
-   	/*emit(fd_o, EV_KEY, KEY_LEFTSHIFT, 1);
-	emit(fd_o, EV_KEY, KEY_M, 1);
-	emit(fd_o, EV_SYN, SYN_REPORT, 0);
-   	emit(fd_o, EV_KEY, KEY_M, 0);
-    emit(fd_o, EV_KEY, KEY_LEFTSHIFT, 0);
-   	emit(fd_o, EV_SYN, SYN_REPORT, 0);*/
-	//read(fd, &data, sizeof(data));
-	//printf("%s", data.value);
+Info, references, and stolen code:
+https://web.archive.org/web/20190327023254/http://www.infradead.org/~mchehab/kernel_docs_pdf/linux-input.pdf
+https://web.archive.org/web/20160430145509/http://thiemonge.org/getting-started-with-uinput
 
-	/*int sendData[2] = {KEY_LEFTSHIFT, KEY_M};
-	printf("Sending chars: %d and %d\n", sendData[0], sendData[1]);
-	sendChars(fd_o, sendData, 2);
+**********************
 
-	getchar();
+The program must be run as root or you won't be able to access
+/dev/uinput
 
-	sendData[0] = KEY_M;
-	printf("Sending chars: %d\n", sendData[0]);
-	sendChars(fd_o, sendData, 1);*/
+Your joycon will need to be connected before running this program.
 
-	getchar();
+****************
+
+http://reactivated.net/writing_udev_rules.html
+
+I'm adding a udev rule for left joycons instead of searching for it.
+Read the above link for some clarification on the selection rules
+if you are having issues.
+
+Create file "99-joycon.rules" in /etc/dev/rules.d/ with this line:
+
+ACTION=="add|change", KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="Joy-Con (L)", SYMLINK+="joycon-l"
+
+*****************
+
+Run:
+evtest /dev/joycon-l 
+to view your joycon inputs
+
+You can also view the uinput virtual device using
+evtest
+and choosing the number corresponding to "Cheesecake"
+
+*****************
+
+Notes on key map config file:
+
+each line has 6 numbers
+event_type event_code event_value outputkey_0 outputkey_1 outputkey_2 
+
+The first three will be used to match the key used.
+Type 1 is a button/key press.
+Choosing 1 for the event value for keypress is pressed,
+0 is released, 2 is held.
+
+Type 3 is an analog stick movement. 0 is released,
+1 and -1 are directions.
+
+I am choosing to ignore all holds, releases, syncs, and misc presses.
+
+The final 3 numbers are the keys which should be activated.
+https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
+Use this file to get the codes for the key you want to send.
+Use 0 for empty spaces. There MUST be 3 numbers here.
+
+You can have up to 20 lines, but the left joycon only has 14 possible 
+inputs.
+
+************************
+evtest info:
+Input device ID: bus 0x5 vendor 0x57e product 0x2006 version 0x1
+Input device name: "Joy-Con (L)"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 304 (BTN_SOUTH)
+    Event code 305 (BTN_EAST)
+    Event code 306 (BTN_C)
+    Event code 307 (BTN_NORTH)
+    Event code 308 (BTN_WEST)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 315 (BTN_START)
+    Event code 316 (BTN_MODE)
+    Event code 317 (BTN_THUMBL)
+    Event code 318 (BTN_THUMBR)
+    Event code 319 (?)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value  32768
+      Min        0
+      Max    65535
+      Flat    4095
+    Event code 1 (ABS_Y)
+      Value  32768
+      Min        0
+      Max    65535
+      Flat    4095
+    Event code 3 (ABS_RX)
+      Value  32768
+      Min        0
+      Max    65535
+      Fuzz     255
+      Flat    4095
+    Event code 4 (ABS_RY)
+      Value  32768
+      Min        0
+      Max    65535
+      Fuzz     255
+      Flat    4095
+    Event code 16 (ABS_HAT0X)
+      Value      0
+      Min       -1
+      Max        1
+    Event code 17 (ABS_HAT0Y)
+      Value      0
+      Min       -1
+      Max        1
+  Event type 4 (EV_MSC)
+    Event code 4 (MSC_SCAN)
+Key repeat handling:
+  Repeat type 20 (EV_REP)
+    Repeat code 0 (REP_DELAY)
+      Value    250
+    Repeat code 1 (REP_PERIOD)
+      Value     33
+Properties:
+

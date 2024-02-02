@@ -6,7 +6,7 @@ int loadKeymap(keyMap **mapsArrayPtr, char *filename) {
 
     fp = fopen(filename, "r");
 	if (!fp) {
-        printf("Map profile could not be opened.\n");
+        printf("Map profile could not be opened. No output will be sent.\n");
         return 0;
     }
 	while (!feof(fp)) {
