@@ -18,10 +18,12 @@ typedef struct {
 
 // maps.c
 int loadKeymap(keyMap **mapsArrayPtr, char *filename);
+void printKeyMap(keyMap **mapsArrayPtr, int mapCount);
+void matchInput(int fd, struct input_event input, keyMap **mapsArrayPtr, int mapCount);
 
 // output.c
 void emit(int fd, int type, int code, int val);
-void sendChars(int fd, int* str, int count);
-void createVirtualInput(int fd);
+void sendChars(int fd, int* outStr);
+void createVirtualInput(int fd, keyMap **mapsArrayPtr, int mapCount);
 
 #endif
