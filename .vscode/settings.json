@@ -1,6 +1,14 @@
 {
     "files.associations": {
         "input.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "uinput.h": "c",
+        "header.h": "c",
+        "stdlib.h": "c",
+        "array": "c",
+        "hash_map": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
     }
 }
