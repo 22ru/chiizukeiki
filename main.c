@@ -8,8 +8,8 @@ int main (int argc, char **argv) {
 	int fd_i, fd_uinput;
 	struct input_event eventData;
 	int mapCount = 0;
-	// there are only 14 keys on the left joycon
-	keyMap *mapsArray[20];
+
+	keyMap *mapsArray[40];
 
 	if (argc > 1) {
 		printf("Loading config from file %s\n", argv[1]);
@@ -28,13 +28,13 @@ int main (int argc, char **argv) {
 	// be sure to create a udev rule for this symlink!
 	fd_i = open("/dev/joycon-l", O_RDONLY);
 	if (fd_i < 0) {
-        printf("Input could not be opened.");
+        printf("Input could not be opened. Is your joycon connected?\n");
         return 0;
     }
 
 	while (1) {
 		read(fd_i, &eventData, sizeof(struct input_event));
-		printf("Event read. type: %d code: %d value: %x\n", eventData.type, eventData.code, eventData.value);
+		printf("\tEvent type: %d code: %d value: %x\n", eventData.type, eventData.code, eventData.value);
 		matchInput(fd_uinput, eventData, mapsArray, mapCount);
 	}
 	

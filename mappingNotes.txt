@@ -39,14 +39,15 @@ each line has 6 numbers
 event_type event_code event_value outputkey_0 outputkey_1 outputkey_2 
 
 The first three will be used to match the key used.
-Type 1 is a button/key press.
-Choosing 1 for the event value for keypress is pressed,
-0 is released, 2 is held.
+Type 1 is a button/key press. Choosing 1 for the event 
+value for keypress is pressed, 0 is released, 2 is held.
 
 Type 3 is an analog stick movement. 0 is released,
 1 and -1 are directions.
 
-I am choosing to ignore all holds, releases, syncs, and misc presses.
+I am choosing to ignore all misc events.
+
+All three event values must be in the map if you want the key to work while held. This would be important for shift, ctrl, and alt.
 
 The final 3 numbers are the keys which should be activated.
 https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
@@ -120,3 +121,67 @@ Key repeat handling:
       Value     33
 Properties:
 
+*******************
+I included releases as well as presses due to issues with ctrl and shift not being sent when held. Other buttons are not meant to be held, so I have not included event value 2 with them.
+
+If this causes slowdown issues, I'll consider mapping ctrl and shift with udev instead.
+
+left arrow -> katakana (key 90)
+transform tool (add to krita)
+1 304 1 90 0 0
+
+down arrow -> ctrl shift a (key 29, 42, 30)
+deselect
+1 305 1 29 42 30
+
+up arrow -> henkan (key 92)
+outline select tool (add to krita)
+1 306 1 92 0 0
+
+right arrow -> b (key 48)
+freehand brush tool
+1 307 1 48 0 0
+
+SL -> ctrl z (key 29, 44)
+undo
+1 308 1 29 44 0
+
+SR
+unused
+1 309 1 0 0 0
+
+- -> tab (key 15)
+canvas only mode
+1 312 1 15 0 0
+
+L3 -> 5 (key 6)
+reset rotation
+1 314 1 6 0 0
+
+screenshot -> 9 (key 10)
+mirror view (add to krita)
+1 317 1 10 0 0
+
+L -> shift (key 42)
+shift
+1 318 1 42 0 0
+
+ZL -> ctrl (key 29)
+control 
+1 319 1 29 0 0
+
+analog down -> 8 (key 9)
+zoom out (add to krita)
+3 16 1 9 0 0
+
+analog up -> 7 (key 8)
+zoom in (add to krita)
+3 16 -1 8 0 0
+
+analog left -> 4 (key 5)
+rotate -15 degrees
+3 17 1 5 0 0
+
+analog right -> 6 (key 7)
+rotate 15 degrees
+3 17 -1 7 0 0

@@ -23,7 +23,7 @@ void matchInput(int fd, struct input_event input, keyMap **mapsArrayPtr, int map
 
 // output.c
 void emit(int fd, int type, int code, int val);
-void sendChars(int fd, int* outStr);
+void sendChars(int fd, int outStr[3], int value);
 void createVirtualInput(int fd, keyMap **mapsArrayPtr, int mapCount);
 
 #endif

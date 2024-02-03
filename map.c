@@ -31,7 +31,7 @@ void printKeyMap(keyMap **mapsArrayPtr, int mapCount) {
 
 void matchInput(int fd, struct input_event input, keyMap **mapsArrayPtr, int mapCount) {
 	// ignore these events
-	if (input.type == 0 || input.type == 4 || input.value == 2 || input.value == 0) {
+	if (input.type == 4) {
 		return;
 	}
 	for (int i = 0; i < mapCount; i++) {
@@ -39,8 +39,16 @@ void matchInput(int fd, struct input_event input, keyMap **mapsArrayPtr, int map
 		// It's unlikely an event code won't match the event type
 		// (at least for the joycon), so I will skip checking it.
 		if (input.code == mapsArrayPtr[i]->eventCode && input.value == mapsArrayPtr[i]->eventValue) {
-			printf("\tOutputting keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
-			sendChars(fd, mapsArrayPtr[i]->result);
+			if (mapsArrayPtr[i]->eventValue == 2) {
+				printf("Holding keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
+				sendChars(fd, mapsArrayPtr[i]->result, 2);
+			} else if (mapsArrayPtr[i]->eventValue == 0) {
+				printf("Releasing held keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
+				sendChars(fd, mapsArrayPtr[i]->result, 0);
+			} else {
+				printf("Outputting keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
+				sendChars(fd, mapsArrayPtr[i]->result, 1);
+			}
 		}
 	}
 }

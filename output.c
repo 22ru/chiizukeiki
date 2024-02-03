@@ -16,17 +16,12 @@ void emit(int fd, int type, int code, int val)
 
 // sending 0 as a key doesn't seem to do anyting
 // so I'm not bothering to remove those cases
-void sendChars(int fd, int outStr[3]) {
+void sendChars(int fd, int outStr[3], int value) {
 	for (int i = 0; outStr[i]; i++) {
-		emit(fd, EV_KEY, outStr[i], 1);
-	}
-	emit(fd, EV_SYN, SYN_REPORT, 0);
-	for (int i = 0; outStr[i]; i++) {
-		emit(fd, EV_KEY, outStr[i], 0);
+		emit(fd, EV_KEY, outStr[i], value);
 	}
 	emit(fd, EV_SYN, SYN_REPORT, 0);
 }
-
 
 // load keymap BEFORE calling this function
 // output keys are needed to set up uinput
