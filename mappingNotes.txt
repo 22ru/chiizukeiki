@@ -122,9 +122,11 @@ Key repeat handling:
 Properties:
 
 *******************
-I included releases as well as presses due to issues with ctrl and shift not being sent when held. Other buttons are not meant to be held, so I have not included event value 2 with them.
+I included releases as well as presses due to issues with ctrl and shift not being sent when held. Alt should be mapped similarly. Other buttons are not meant to be held, so I have not included event value 2 with them.
 
 If this causes slowdown issues, I'll consider mapping ctrl and shift with udev instead.
+
+I placed the most commonly used keys at the top of the array so that they would be found first. 
 
 left arrow -> katakana (key 90)
 transform tool (add to krita)
