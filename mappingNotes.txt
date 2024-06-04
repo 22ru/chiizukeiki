@@ -17,9 +17,15 @@ I'm adding a udev rule for left joycons instead of searching for it.
 Read the above link for some clarification on the selection rules
 if you are having issues.
 
-Create file "99-joycon.rules" in /etc/dev/rules.d/ with this line:
+Create file "99-joycon.rules" in /etc/udev/rules.d/ with this line:
 
 ACTION=="add|change", KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="Joy-Con (L)", SYMLINK+="joycon-l"
+
+DEBIAN 12: 
+
+ACTION=="add", KERNEL=="event[0-9]*", ATTRS{name}=="Nintendo Switch Left Joy-Con", SYMLINK+="joycon-l"
+
+There are 2 events for the joycon. Don't use the one ending in IMU. It's generally the event with the higher number
 
 *****************
 
@@ -187,3 +193,134 @@ rotate -15 degrees
 analog right -> 6 (key 7)
 rotate 15 degrees
 3 17 -1 7 0 0
+_____________________________________________________________
+
+Debian 12 comes with a better joycon driver. Now with full analog stick support.
+
+Create file "99-joycon.rules" in /etc/dev/rules.d/ with this line:
+
+ACTION=="add", KERNEL=="event[0-9]*", ATTRS{name}=="Nintendo Switch Left Joy-Con", SYMLINK+="joycon-l"
+
+Input driver version is 1.0.1
+Input device ID: bus 0x5 vendor 0x57e product 0x2006 version 0x8001
+Input device name: "Nintendo Switch Left Joy-Con"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 317 (BTN_THUMBL)
+    Event code 544 (BTN_DPAD_UP)
+    Event code 545 (BTN_DPAD_DOWN)
+    Event code 546 (BTN_DPAD_LEFT)
+    Event code 547 (BTN_DPAD_RIGHT)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+  Event type 21 (EV_FF)
+    Event code 80 (FF_RUMBLE)
+    Event code 81 (FF_PERIODIC)
+    Event code 88 (FF_SQUARE)
+    Event code 89 (FF_TRIANGLE)
+    Event code 90 (FF_SINE)
+    Event code 96 (FF_GAIN)
+
+
+left arrow -> katakana (key 90)
+transform tool (add to krita)
+1 546 1 90 0 0
+
+down arrow -> ctrl shift a (key 29, 42, 30)
+deselect
+1 545 1 29 42 30
+
+up arrow -> henkan (key 92)
+freehand selection tool (add to krita)
+1 544 1 92 0 0
+
+right arrow -> b (key 48)
+freehand brush tool
+1 547 1 48 0 0
+
+// ctrl z is very dangerous outside of the correct program!
+// setting this to something harmless and then adding it to krita config
+// makes me a lot less worried
+SL -> ctrl shift h (key 29, 42, 35)
+undo (add to krita)
+1 311 1 29 42 35
+
+SR
+unused
+1 313 1 0 0 0
+
+- -> tab (key 15)
+show canvas only
+1 314 1 15 0 0
+
+L3 -> 5 (key 6)
+reset rotation (add to krita)
+1 317 1 6 0 0
+
+screenshot -> 9 (key 10)
+mirror view (add to krita)
+1 309 1 10 0 0
+
+L -> shift (key 42)
+shift
+1 310 1 42 0 0
+
+ZL -> ctrl (key 29)
+control 
+1 312 1 29 0 0
+
+
+// These are different now
+
+Over 20000 in any direction is likely intentional.
+These do not return to 0 and do not send a sync event.
+These events are much more frequent and go-no-go should be used
+I pray that you put these at the top of your config file.
+
+Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+
+Y analog down -> 8 (key 9)
+zoom out (add to krita)
+3 1 1 9 0 0
+
+Y analog up -> 7 (key 8)
+zoom in (add to krita)
+3 1 -1 8 0 0
+
+X analog left -> 4 (key 5)
+rotate -15 degrees
+3 0 -1 5 0 0
+
+X analog right -> 6 (key 7)
+rotate 15 degrees
+3 0 1 7 0 0

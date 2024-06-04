@@ -30,14 +30,53 @@ void printKeyMap(keyMap **mapsArrayPtr, int mapCount) {
 }
 
 void matchInput(int fd, struct input_event input, keyMap **mapsArrayPtr, int mapCount) {
-	// ignore these events
-	if (input.type == 4) {
+	static int analog[2];
+	int val;
+
+	// ignore these events. I don't see any occuring anymore, so I'll skip this
+	if (input.type == 0 || input.type == 4) {
 		return;
 	}
+
+	//case: type 3, analog stick go-no-go
+	// setting 3 levels for each analog axis
+	if (input.type == 3) {
+		/*printf("Analog input: ");
+		if (input.code) {
+			printf("y");
+		} else {
+			printf("x");
+		}
+		printf(" value: %d\n", input.value);
+		*/
+		// come back to this and optimize it pls
+		if (input.value > 25000) {
+			val = 1;
+		} else if (input.value < -25000) {
+			val = -1;
+		} else {
+			val = 0;
+		}
+ 		//printf("curr val: %d, last val: %d\n", val, analog[input.code]);
+		if (analog[input.code] == val) {
+			// no-go if value remains the same
+			return;
+		} else {
+			analog[input.code] = val;
+
+			for (int i = 0; i < mapCount; i++) {
+				if (input.code == mapsArrayPtr[i]->eventCode && val == mapsArrayPtr[i]->eventValue) {
+					printf("Outputting and releasing keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
+					sendChars(fd, mapsArrayPtr[i]->result, 1);
+					sendChars(fd, mapsArrayPtr[i]->result, 0);
+				}
+			}
+		}
+	}
+
 	for (int i = 0; i < mapCount; i++) {
 		// in order of specificity
-		// It's unlikely an event code won't match the event type
-		// (at least for the joycon), so I will skip checking it.
+		// event code is definitely 1 at this point
 		if (input.code == mapsArrayPtr[i]->eventCode && input.value == mapsArrayPtr[i]->eventValue) {
 			if (mapsArrayPtr[i]->eventValue == 2) {
 				printf("Holding keys %d, %d, %d\n", mapsArrayPtr[i]->result[0],mapsArrayPtr[i]->result[1],mapsArrayPtr[i]->result[2]);
