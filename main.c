@@ -30,6 +30,7 @@ int main (int argc, char **argv) {
 	while (fd_i < 0) {
         printf("Input could not be opened. Is your joycon connected? Press any button after connecting...\n");
 		getchar();
+		fd_i = open("/dev/joycon-l", O_RDONLY);
     }
 
 	while (1) {
