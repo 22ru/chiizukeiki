@@ -1,0 +1,10 @@
+[Shortcuts]
+KisToolSelectOutline=Henkan
+KisToolTransform=Ctrl+T; Katakana
+edit_undo=Ctrl+Z; Ctrl+Shift+H
+mirror_canvas=M; 9
+reset_canvas_rotation=5
+rotate_canvas_left=Ctrl+[; 4
+rotate_canvas_right=Ctrl+]; 6
+view_zoom_in=Ctrl++; 7
+view_zoom_out=Ctrl+-; 8

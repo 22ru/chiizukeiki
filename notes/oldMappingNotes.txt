@@ -1,0 +1,263 @@
+Debian 12 comes with a better joycon driver. Now with full analog stick support.
+
+Input driver version is 1.0.1
+Input device ID: bus 0x5 vendor 0x57e product 0x2006 version 0x8001
+Input device name: "Nintendo Switch Left Joy-Con"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 317 (BTN_THUMBL)
+    Event code 544 (BTN_DPAD_UP)
+    Event code 545 (BTN_DPAD_DOWN)
+    Event code 546 (BTN_DPAD_LEFT)
+    Event code 547 (BTN_DPAD_RIGHT)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+  Event type 21 (EV_FF)
+    Event code 80 (FF_RUMBLE)
+    Event code 81 (FF_PERIODIC)
+    Event code 88 (FF_SQUARE)
+    Event code 89 (FF_TRIANGLE)
+    Event code 90 (FF_SINE)
+    Event code 96 (FF_GAIN)
+
+
+left arrow -> katakana (key 90)
+transform tool (add to krita)
+1 546 1 90 0 0
+
+down arrow -> ctrl shift a (key 29, 42, 30)
+deselect
+1 545 1 29 42 30
+
+up arrow -> henkan (key 92)
+freehand selection tool (add to krita)
+1 544 1 92 0 0
+
+right arrow -> b (key 48)
+freehand brush tool
+1 547 1 48 0 0
+
+// ctrl z is very dangerous outside of the correct program!
+// setting this to something harmless and then adding it to krita config
+// makes me a lot less worried
+SL -> ctrl shift h (key 29, 42, 35)
+undo (add to krita)
+1 311 1 29 42 35
+
+SR
+unused
+1 313 1 0 0 0
+
+- -> tab (key 15)
+show canvas only
+1 314 1 15 0 0
+
+L3 -> 5 (key 6)
+reset rotation (add to krita)
+1 317 1 6 0 0
+
+screenshot -> 9 (key 10)
+mirror view (add to krita)
+1 309 1 10 0 0
+
+L -> shift (key 42)
+shift
+1 310 1 42 0 0
+
+ZL -> ctrl (key 29)
+control 
+1 312 1 29 0 0
+
+
+// These are different in Debian 12
+
+Over 20000 in any direction is likely intentional.
+These do not return to 0 and do not send a sync event.
+These events are much more frequent and go-no-go should be used
+I pray that you put these at the top of your config file.
+
+Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+
+Y analog down -> 8 (key 9)
+zoom out (add to krita)
+3 1 1 9 0 0
+
+Y analog up -> 7 (key 8)
+zoom in (add to krita)
+3 1 -1 8 0 0
+
+X analog left -> 4 (key 5)
+rotate -15 degrees
+3 0 -1 5 0 0
+
+X analog right -> 6 (key 7)
+rotate 15 degrees
+3 0 1 7 0 0
+
+************************ PRIOR TO DEBIAN 12************************
+
+
+Create file "99-joycon.rules" in /etc/udev/rules.d/ with this line:
+
+ACTION=="add|change", KERNEL=="event[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="Joy-Con (L)", SYMLINK+="joycon-l"
+
+
+evtest info:
+Input device ID: bus 0x5 vendor 0x57e product 0x2006 version 0x1
+Input device name: "Joy-Con (L)"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 304 (BTN_SOUTH)
+    Event code 305 (BTN_EAST)
+    Event code 306 (BTN_C)
+    Event code 307 (BTN_NORTH)
+    Event code 308 (BTN_WEST)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 315 (BTN_START)
+    Event code 316 (BTN_MODE)
+    Event code 317 (BTN_THUMBL)
+    Event code 318 (BTN_THUMBR)
+    Event code 319 (?)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value  32768
+      Min        0
+      Max    65535
+      Flat    4095
+    Event code 1 (ABS_Y)
+      Value  32768
+      Min        0
+      Max    65535
+      Flat    4095
+    Event code 3 (ABS_RX)
+      Value  32768
+      Min        0
+      Max    65535
+      Fuzz     255
+      Flat    4095
+    Event code 4 (ABS_RY)
+      Value  32768
+      Min        0
+      Max    65535
+      Fuzz     255
+      Flat    4095
+    Event code 16 (ABS_HAT0X)
+      Value      0
+      Min       -1
+      Max        1
+    Event code 17 (ABS_HAT0Y)
+      Value      0
+      Min       -1
+      Max        1
+  Event type 4 (EV_MSC)
+    Event code 4 (MSC_SCAN)
+Key repeat handling:
+  Repeat type 20 (EV_REP)
+    Repeat code 0 (REP_DELAY)
+      Value    250
+    Repeat code 1 (REP_PERIOD)
+      Value     33
+Properties:
+
+*******************
+I included releases as well as presses due to issues with ctrl and shift not being sent when held. Alt should be mapped similarly. Other buttons are not meant to be held, so I have not included event value 2 with them.
+
+If this causes slowdown issues, I'll consider mapping ctrl and shift with udev instead.
+
+I placed the most commonly used keys at the top of the array so that they would be found first. 
+
+left arrow -> katakana (key 90)
+transform tool (add to krita)
+1 304 1 90 0 0
+
+down arrow -> ctrl shift a (key 29, 42, 30)
+deselect
+1 305 1 29 42 30
+
+up arrow -> henkan (key 92)
+outline select tool (add to krita)
+1 306 1 92 0 0
+
+right arrow -> b (key 48)
+freehand brush tool
+1 307 1 48 0 0
+
+SL -> ctrl z (key 29, 44)
+undo
+1 308 1 29 44 0
+
+SR
+unused
+1 309 1 0 0 0
+
+- -> tab (key 15)
+canvas only mode
+1 312 1 15 0 0
+
+L3 -> 5 (key 6)
+reset rotation
+1 314 1 6 0 0
+
+screenshot -> 9 (key 10)
+mirror view (add to krita)
+1 317 1 10 0 0
+
+L -> shift (key 42)
+shift
+1 318 1 42 0 0
+
+ZL -> ctrl (key 29)
+control 
+1 319 1 29 0 0
+
+analog down -> 8 (key 9)
+zoom out (add to krita)
+3 16 1 9 0 0
+
+analog up -> 7 (key 8)
+zoom in (add to krita)
+3 16 -1 8 0 0
+
+analog left -> 4 (key 5)
+rotate -15 degrees
+3 17 1 5 0 0
+
+analog right -> 6 (key 7)
+rotate 15 degrees
+3 17 -1 7 0 0

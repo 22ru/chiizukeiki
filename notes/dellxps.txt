@@ -1,0 +1,15 @@
+Can change the scale factor for the program
+but half the time, it refuses to display
+env QT_SCALE_FACTOR=.5 krita
+
+Instead, I used
+xrandr --output DP-2 --scale 2x2
+(DP-2 is the cintiq)
+
+Still might want to consider adding ctrl and alt buttons to udev if slowdown occurs.
+It'll free 4 of the 26 rules. Removing the unused SR button in the map would 
+free 2 more if I can't find a use for them
+
+Issue:
+stylus cannot click buttons in the krita UI
+-tried again and it works? Keep an eye on it

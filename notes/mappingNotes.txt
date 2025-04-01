@@ -1,0 +1,178 @@
+Info, references, and stolen code:
+https://web.archive.org/web/20190327023254/http://www.infradead.org/~mchehab/kernel_docs_pdf/linux-input.pdf
+https://web.archive.org/web/20160430145509/http://thiemonge.org/getting-started-with-uinput
+
+**********************
+
+The program must be run as root or you won't be able to access
+/dev/uinput
+
+Your joycon will need to be connected before running this program.
+
+****************
+
+
+I'm adding a udev rule for left joycons instead of searching for it.
+Read the above link for some clarification on the selection rules
+if you are having issues. There's more notes in udevNotes.txt
+This part gives me trouble every time I set it up.
+
+You MUST add a udev symlink rule for this to work.
+
+
+*****************
+
+Notes on key map config file:
+
+Each line has 6 numbers
+event_type event_code event_value outputkey_0 outputkey_1 outputkey_2 
+
+The first three will be used to match the key used.
+Type 1 is a button/key press. Choosing 1 for the event 
+value for keypress is pressed, 0 is released, 2 is held.
+Type 3 is an analog stick movement. 0 is released,
+1 and -1 are directions.
+
+I am choosing to ignore all misc events (type 4), if for some reason you 
+wanted to use one of these, you'll have to make modifications.
+
+All three event values must be in the map if you want 
+the key to work while held. This would be important for shift, ctrl, and alt.
+
+The final 3 numbers are the keys which should be activated.
+https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
+Use this file to get the codes for the key you want to send.
+Use 0 for empty spaces. There MUST be 3 numbers here.
+
+You can have up to 40 lines. Each button needs two lines, one for 
+press and one for release. My algorithm is not at all optimized 
+and it is advisable to keep the most used keys at the top and keep 
+the list as short as possible.
+
+_____________________________________________________________
+
+Debian 12 comes with a better joycon driver. Now with full analog stick support.
+
+Input driver version is 1.0.1
+Input device ID: bus 0x5 vendor 0x57e product 0x2006 version 0x8001
+Input device name: "Nintendo Switch Left Joy-Con"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 317 (BTN_THUMBL)
+    Event code 544 (BTN_DPAD_UP)
+    Event code 545 (BTN_DPAD_DOWN)
+    Event code 546 (BTN_DPAD_LEFT)
+    Event code 547 (BTN_DPAD_RIGHT)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+  Event type 21 (EV_FF)
+    Event code 80 (FF_RUMBLE)
+    Event code 81 (FF_PERIODIC)
+    Event code 88 (FF_SQUARE)
+    Event code 89 (FF_TRIANGLE)
+    Event code 90 (FF_SINE)
+    Event code 96 (FF_GAIN)
+
+
+left arrow -> katakana (key 90)
+transform tool (add to krita)
+1 546 1 90 0 0
+
+down arrow -> ctrl shift a (key 29, 42, 30)
+deselect
+1 545 1 29 42 30
+
+up arrow -> henkan (key 92)
+freehand selection tool (add to krita)
+1 544 1 92 0 0
+
+right arrow -> b (key 48)
+freehand brush tool
+1 547 1 48 0 0
+
+// ctrl z is very dangerous outside of the correct program!
+// setting this to something harmless and then adding it to krita config
+// makes me a lot less worried
+SL -> ctrl shift h (key 29, 42, 35)
+undo (add to krita)
+1 311 1 29 42 35
+
+SR
+unused
+1 313 1 0 0 0
+
+- -> tab (key 15)
+show canvas only
+1 314 1 15 0 0
+
+L3 -> 5 (key 6)
+reset canvas rotation (add to krita)
+1 317 1 6 0 0
+
+screenshot -> 9 (key 10)
+mirror view (add to krita)
+1 309 1 10 0 0
+
+L -> shift (key 42)
+shift
+1 310 1 42 0 0
+
+ZL -> ctrl (key 29)
+control 
+1 312 1 29 0 0
+
+
+// These are different in Debian 12
+
+Over 20000 in any direction is likely intentional.
+These do not return to 0 and do not send a sync event.
+These events are much more frequent and go-no-go should be used
+I pray that you put these at the top of your config file.
+
+Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value      0
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+    Event code 1 (ABS_Y)
+      Value   -124
+      Min   -32767
+      Max    32767
+      Fuzz     250
+      Flat     500
+
+Y analog down -> 8 (key 9)
+zoom out (add to krita)
+3 1 1 9 0 0
+
+Y analog up -> 7 (key 8)
+zoom in (add to krita)
+3 1 -1 8 0 0
+
+X analog left -> 4 (key 5)
+rotate canvas left (-15 degrees)
+3 0 -1 5 0 0
+
+X analog right -> 6 (key 7)
+rotate right (15 degrees)
+3 0 1 7 0 0

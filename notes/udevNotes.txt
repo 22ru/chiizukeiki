@@ -1,0 +1,69 @@
+The Struggle
+
+Getting the device info:
+
+Before connecting your joycon over bluetooth, I recommend going to your switch settings and
+disconnecting all controllers while the joycon you want to use is physically disconnected from the switch.
+This will save you a lot of pain attempting to connect.
+
+run:
+sudo evtest
+There are 2 events for the joycon. Don't choose the one ending in IMU.
+
+Extra difficulty:
+
+Run: 
+udevadm monitor --property
+and then connect to the joycon to get the device path
+
+Then,
+udevadm info --attribute-walk --path=/devices/[your path here]
+
+If in nowhere in the list is the vendor and product code, you are hecked.
+
+The vendor is 0x57e and product is 0x2006.
+
+**************************
+
+Creating the rule:
+
+Cheesecake is looking for the symlink "joycon-l", so whatever rule you come up with has to add this.
+
+Create file "99-joycon.rules" in /etc/udev/rules.d/ with this line:
+
+ACTION=="add", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2006", ATTRS{properties}!="40", SYMLINK+="joycon-l"
+
+excluding properties of 40 because this is the difference between the IMU and normal event
+
+Restart or run:
+sudo udevadm control --reload && sudo udevadm trigger
+
+**************************
+
+Run:
+evtest /dev/joycon-l 
+to view your joycon inputs
+
+
+You can also view the uinput virtual device using evtest
+and choosing the event number corresponding to "Cheesecake"
+
+**************************
+
+Still doesn't work? Make sure your udev rule is being read:
+sudo udevadm test /devices/[your path here]
+I spent hours once troubleshooting to find I had written the file in the wrong path.
+
+Still no? Pray to god you have a friend who can help. I cannot help you.
+Reinstall blueman, update your kernel, disconnect and reconnect your joycon, cry. Good luck.
+
+To check if hid-nintendo (the driver) is installed:
+sudo modinfo hid-nintendo
+
+
+More info:
+https://wiki.archlinux.org/title/Udev
+http://reactivated.net/writing_udev_rules.html
+https://catswhisker.xyz/log/2018/8/27/use_vecinfinity_usb_foot_pedal_as_a_keyboard_under_linux/
+
+0005:057E:2006.XXXX

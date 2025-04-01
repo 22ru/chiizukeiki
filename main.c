@@ -27,9 +27,9 @@ int main (int argc, char **argv) {
 
 	// be sure to create a udev rule for this symlink!
 	fd_i = open("/dev/joycon-l", O_RDONLY);
-	if (fd_i < 0) {
-        printf("Input could not be opened. Is your joycon connected?\n");
-        return 0;
+	while (fd_i < 0) {
+        printf("Input could not be opened. Is your joycon connected? Press any button after connecting...\n");
+		getchar();
     }
 
 	while (1) {
