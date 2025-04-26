@@ -11,7 +11,6 @@ Your joycon will need to be connected before running this program.
 
 ****************
 
-
 I'm adding a udev rule for left joycons instead of searching for it.
 Read the above link for some clarification on the selection rules
 if you are having issues. There's more notes in udevNotes.txt
@@ -19,6 +18,9 @@ This part gives me trouble every time I set it up.
 
 You MUST add a udev symlink rule for this to work.
 
+It would be a lot more efficient to map everything through the keymap 
+file. Unfortunately, you cannot map multiple keys out with this method,
+which is why I made this in the first place.
 
 *****************
 

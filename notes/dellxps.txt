@@ -6,6 +6,9 @@ Instead, I used
 xrandr --output DP-2 --scale 2x2
 (DP-2 is the cintiq)
 
+Read about HiDPI?
+https://www.reddit.com/r/UbuntuMATE/comments/chacsk/screen_scaling_on_high_resolution_display/
+
 Still might want to consider adding ctrl and alt buttons to udev if slowdown occurs.
 It'll free 4 of the 26 rules. Removing the unused SR button in the map would 
 free 2 more if I can't find a use for them
