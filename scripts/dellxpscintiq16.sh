@@ -13,7 +13,7 @@ if [[ -z "$display" ]]; then
 	exit 1
 fi
 
-xrandr --output $display --scale 2x2
+#xrandr --output $display --scale 1x1
 xsetwacom set $(xinput list --id-only "Wacom Cintiq 16 Pen stylus") MapToOutput $display
 xsetwacom set $(xinput list --id-only "Wacom Cintiq 16 Pen eraser") MapToOutput $display
 

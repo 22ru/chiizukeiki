@@ -1,3 +1,16 @@
+Still might want to consider adding ctrl and alt buttons to udev if slowdown occurs.
+It'll free 4 of the 26 rules. Removing the unused SR button in the map would 
+free 2 more if I can't find a use for them.
+
+I hear the fan going with everything open but I haven't experienced slowdown. top does not show krita or chiizukeiki as hogging CPU.
+
+Read about HiDPI? or not
+https://www.reddit.com/r/UbuntuMATE/comments/chacsk/screen_scaling_on_high_resolution_display/
+
+########################
+
+Old notes:
+
 Can change the scale factor for the program
 but half the time, it refuses to display
 env QT_SCALE_FACTOR=.5 krita
@@ -6,13 +19,9 @@ Instead, I used
 xrandr --output DP-2 --scale 2x2
 (DP-2 is the cintiq)
 
-Read about HiDPI?
-https://www.reddit.com/r/UbuntuMATE/comments/chacsk/screen_scaling_on_high_resolution_display/
-
-Still might want to consider adding ctrl and alt buttons to udev if slowdown occurs.
-It'll free 4 of the 26 rules. Removing the unused SR button in the map would 
-free 2 more if I can't find a use for them
-
 Issue:
-stylus cannot click buttons in the krita UI
--tried again and it works? Keep an eye on it
+I found that the stylus was hitting the point of the cursor, but the cursor was hitting the area maybe 20 pixels below it.
+I tried reconnecting once and it did work properly, but it's inconsistent.
+
+Set laptop monitor to 1920x1080. Scale 100%.
+Give up on having it 4k!!! Mapping is a disaster.

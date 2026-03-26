@@ -6,6 +6,17 @@ Before connecting your joycon over bluetooth, I recommend going to your switch s
 disconnecting all controllers while the joycon you want to use is physically disconnected from the switch.
 This will save you a lot of pain attempting to connect.
 
+Bluetooth is a pain. Only the top LED will light up when it's correctly connected. If it's doing the animation, it's gonna have issues and won't be recognized as an input.
+
+bluetoothctl
+remove [joycon]
+scan on
+pair [joycon]
+trust [joycon]
+connect [joycon]
+
+I have a script for this in the scripts folder and am using an alias with the MAC address of my joycon.
+
 run:
 sudo evtest
 There are 2 events for the joycon. Don't choose the one ending in IMU.
